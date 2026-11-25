@@ -9,7 +9,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      - uses: android-actions/setup-android@v3
       - name: Build patches
         env:
           GITHUB_ACTOR: ${{ github.actor }}
