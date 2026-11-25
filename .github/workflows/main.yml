@@ -1,0 +1,23 @@
+name: Build MPP
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: android-actions/setup-android@v3
+      - name: Build patches
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x gradlew
+          ./gradlew build -Pgpr.user=$GITHUB_ACTOR -Pgpr.key=$GITHUB_TOKEN
+      - uses: actions/upload-artifact@v4
+        with:
+          name: custom-patches
+          path: patches/build/libs/*.mpp
